@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 
+export const dynamic = "force-dynamic";
+
 function Nav() {
   return (
     <nav className="flex items-center justify-center bg-blue-500">
