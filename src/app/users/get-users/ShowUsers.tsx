@@ -1,5 +1,5 @@
 import { prisma } from "@/app/lib/dbConnect";
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 export default async function ShowUsers() {
   const users = await prisma.user.findMany();
