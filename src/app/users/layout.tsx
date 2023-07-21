@@ -16,6 +16,7 @@ function Nav() {
       >
         Add User
       </Link>
+      <h1>{Math.random().toFixed(2)}</h1>
     </nav>
   );
 }
