@@ -2,7 +2,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-export async function postRequest(url: string, postData: Record<string, any>) {
+async function postRequest(url: string, postData: Record<string, any>) {
   const resp = await fetch(url, {
     method: "POST",
     headers: {
