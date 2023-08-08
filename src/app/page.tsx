@@ -1,9 +1,9 @@
-import Image from "next/image";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import HomePage from "@/components/home-page";
 
-export default function Home() {
-  return (
-    <main className="flex h-full items-center justify-center">
-      <h1>This is the new appp that I am making</h1>
-    </main>
-  );
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  return <HomePage session={session} />;
 }
