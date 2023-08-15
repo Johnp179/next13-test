@@ -1,9 +1,20 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import HomePage from "@/components/home-page";
+"use client";
+import { authOptions } from "@/lib/auth-options";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+import { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+export default function Page({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  const router = useRouter();
 
-  return <HomePage session={session} />;
+  return (
+    <main className="flex justify-center items-center min-h-screen">
+      <button onClick={() => router.refresh()}>Refresh</button>
+    </main>
+  );
 }

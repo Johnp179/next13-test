@@ -3,11 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcrypt";
-
-export interface RegisterError {
-  username: boolean;
-  email: boolean;
-}
+import { RegisterError } from "@/types/user";
 
 const Validator = z.object({
   username: z.string(),
@@ -61,7 +57,7 @@ export async function POST(req: NextRequest) {
         status: 500,
       });
     }
-    return NextResponse.json("User already exists", {
+    return NextResponse.json(error, {
       status: 401,
     });
   }
