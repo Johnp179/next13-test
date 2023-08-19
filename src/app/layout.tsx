@@ -20,8 +20,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <nav className="flex justify-center items-center p-4 uppercase gap-4 text-4xl">
-          <Link href="/vault">Vault</Link>
-          <Link href="/register">Register</Link>
+          <Link href="/vault" prefetch={false}>
+            Vault
+          </Link>
+          <Link href="/prefetch">Prefetch</Link>
+          <Link href="/no-prefetch" prefetch={false}>
+            No prefetch
+          </Link>
         </nav>
         {children}
       </body>

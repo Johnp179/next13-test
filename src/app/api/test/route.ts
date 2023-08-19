@@ -1,6 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const url = new URL("/vault", req.url);
-  return NextResponse.redirect(url);
+let connection = false;
+//123
+
+export function GET() {
+  console.log(connection);
+  if (!connection) {
+    connection = true;
+  }
+  return NextResponse.json("heya");
 }
+
+// export function POST() {
+//   total += 10;
+//   return NextResponse.json("incremented");
+// }

@@ -8,10 +8,12 @@ const algorithm = "aes-192-cbc";
 const key = scryptSync(envVars.ENCRYPTION_KEY_BASE, envVars.SALT, 24); //key
 const iv = scryptSync(envVars.IVBASE, envVars.SALT, 16); // Initialization vector.
 
-const Validator = z.object({
+const PostValidator = z.object({
   name: z.string(),
   password: z.string(),
 });
+
+const UpdateValidator = PostValidator.partial();
 
 export async function GET(
   _: Request,
@@ -49,21 +51,65 @@ export async function GET(
   }
 }
 
-// export async function PUT(req:NextRequest, {params:id}:{
-//   params:{
-//     id:string
-//   }
-// }){
-//   const url = new URL("/path", req.url)
-// }
+export async function PUT(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: {
+      id: string;
+    };
+  }
+) {
+  try {
+    const { id } = params;
+    const data = UpdateValidator.parse(await req.json());
+    const user = await prisma.account.update({
+      data,
+      where: {
+        id,
+      },
+    });
+    return NextResponse.json(user);
+  } catch (error) {
+    console.error(error);
 
-// export async function DELETE({params:id}:{
-//   params:{
-//     id:string
-//   }
-// }){
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(error, {
+        status: 400,
+      });
+    }
+    return NextResponse.json((error as Error).message, {
+      status: 500,
+    });
+  }
+}
 
-// }
+export async function DELETE(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: {
+      id: string;
+    };
+  }
+) {
+  try {
+    const { id } = params;
+    const user = await prisma.account.delete({
+      where: {
+        id,
+      },
+    });
+    return NextResponse.json(user);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json((error as Error).message, {
+      status: 500,
+    });
+  }
+}
 
 export async function POST(
   req: NextRequest,
@@ -77,7 +123,7 @@ export async function POST(
 ) {
   try {
     const { id } = params;
-    const { name, password } = Validator.parse(await req.json());
+    const { name, password } = PostValidator.parse(await req.json());
     const cipher = createCipheriv(algorithm, key, iv);
     let encryptedPassword = cipher.update(password, "utf8", "hex");
     encryptedPassword += cipher.final("hex");
